@@ -1,0 +1,549 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		CDD1D0432E0DDCE800436E08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CDD1D02D2E0DDCE600436E08 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CDD1D0342E0DDCE600436E08;
+			remoteInfo = CatsTV;
+		};
+		CDD1D04D2E0DDCE800436E08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CDD1D02D2E0DDCE600436E08 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CDD1D0342E0DDCE600436E08;
+			remoteInfo = CatsTV;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CDD1D0352E0DDCE600436E08 /* CatsTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CatsTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDD1D0422E0DDCE800436E08 /* CatsTVTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CatsTVTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDD1D04C2E0DDCE800436E08 /* CatsTVUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CatsTVUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CDD1D0372E0DDCE600436E08 /* CatsTV */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CatsTV;
+			sourceTree = "<group>";
+		};
+		CDD1D0452E0DDCE800436E08 /* CatsTVTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CatsTVTests;
+			sourceTree = "<group>";
+		};
+		CDD1D04F2E0DDCE800436E08 /* CatsTVUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CatsTVUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CDD1D0322E0DDCE600436E08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDD1D03F2E0DDCE800436E08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDD1D0492E0DDCE800436E08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CDD1D02C2E0DDCE600436E08 = {
+			isa = PBXGroup;
+			children = (
+				CDD1D0372E0DDCE600436E08 /* CatsTV */,
+				CDD1D0452E0DDCE800436E08 /* CatsTVTests */,
+				CDD1D04F2E0DDCE800436E08 /* CatsTVUITests */,
+				CDD1D0362E0DDCE600436E08 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CDD1D0362E0DDCE600436E08 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CDD1D0352E0DDCE600436E08 /* CatsTV.app */,
+				CDD1D0422E0DDCE800436E08 /* CatsTVTests.xctest */,
+				CDD1D04C2E0DDCE800436E08 /* CatsTVUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CDD1D0342E0DDCE600436E08 /* CatsTV */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDD1D0562E0DDCE800436E08 /* Build configuration list for PBXNativeTarget "CatsTV" */;
+			buildPhases = (
+				CDD1D0312E0DDCE600436E08 /* Sources */,
+				CDD1D0322E0DDCE600436E08 /* Frameworks */,
+				CDD1D0332E0DDCE600436E08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CDD1D0372E0DDCE600436E08 /* CatsTV */,
+			);
+			name = CatsTV;
+			packageProductDependencies = (
+			);
+			productName = CatsTV;
+			productReference = CDD1D0352E0DDCE600436E08 /* CatsTV.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CDD1D0412E0DDCE800436E08 /* CatsTVTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDD1D0592E0DDCE800436E08 /* Build configuration list for PBXNativeTarget "CatsTVTests" */;
+			buildPhases = (
+				CDD1D03E2E0DDCE800436E08 /* Sources */,
+				CDD1D03F2E0DDCE800436E08 /* Frameworks */,
+				CDD1D0402E0DDCE800436E08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CDD1D0442E0DDCE800436E08 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CDD1D0452E0DDCE800436E08 /* CatsTVTests */,
+			);
+			name = CatsTVTests;
+			packageProductDependencies = (
+			);
+			productName = CatsTVTests;
+			productReference = CDD1D0422E0DDCE800436E08 /* CatsTVTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CDD1D04B2E0DDCE800436E08 /* CatsTVUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDD1D05C2E0DDCE800436E08 /* Build configuration list for PBXNativeTarget "CatsTVUITests" */;
+			buildPhases = (
+				CDD1D0482E0DDCE800436E08 /* Sources */,
+				CDD1D0492E0DDCE800436E08 /* Frameworks */,
+				CDD1D04A2E0DDCE800436E08 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CDD1D04E2E0DDCE800436E08 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CDD1D04F2E0DDCE800436E08 /* CatsTVUITests */,
+			);
+			name = CatsTVUITests;
+			packageProductDependencies = (
+			);
+			productName = CatsTVUITests;
+			productReference = CDD1D04C2E0DDCE800436E08 /* CatsTVUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CDD1D02D2E0DDCE600436E08 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					CDD1D0342E0DDCE600436E08 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					CDD1D0412E0DDCE800436E08 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = CDD1D0342E0DDCE600436E08;
+					};
+					CDD1D04B2E0DDCE800436E08 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = CDD1D0342E0DDCE600436E08;
+					};
+				};
+			};
+			buildConfigurationList = CDD1D0302E0DDCE600436E08 /* Build configuration list for PBXProject "CatsTV" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CDD1D02C2E0DDCE600436E08;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CDD1D0362E0DDCE600436E08 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CDD1D0342E0DDCE600436E08 /* CatsTV */,
+				CDD1D0412E0DDCE800436E08 /* CatsTVTests */,
+				CDD1D04B2E0DDCE800436E08 /* CatsTVUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CDD1D0332E0DDCE600436E08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDD1D0402E0DDCE800436E08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDD1D04A2E0DDCE800436E08 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CDD1D0312E0DDCE600436E08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDD1D03E2E0DDCE800436E08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDD1D0482E0DDCE800436E08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CDD1D0442E0DDCE800436E08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CDD1D0342E0DDCE600436E08 /* CatsTV */;
+			targetProxy = CDD1D0432E0DDCE800436E08 /* PBXContainerItemProxy */;
+		};
+		CDD1D04E2E0DDCE800436E08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CDD1D0342E0DDCE600436E08 /* CatsTV */;
+			targetProxy = CDD1D04D2E0DDCE800436E08 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CDD1D0542E0DDCE800436E08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 18.5;
+			};
+			name = Debug;
+		};
+		CDD1D0552E0DDCE800436E08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = appletvos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				TVOS_DEPLOYMENT_TARGET = 18.5;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CDD1D0572E0DDCE800436E08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = info.CatsTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Debug;
+		};
+		CDD1D0582E0DDCE800436E08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = info.CatsTV;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Release;
+		};
+		CDD1D05A2E0DDCE800436E08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = info.CatsTVTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CatsTV.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CatsTV";
+				TVOS_DEPLOYMENT_TARGET = 18.5;
+			};
+			name = Debug;
+		};
+		CDD1D05B2E0DDCE800436E08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = info.CatsTVTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CatsTV.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CatsTV";
+				TVOS_DEPLOYMENT_TARGET = 18.5;
+			};
+			name = Release;
+		};
+		CDD1D05D2E0DDCE800436E08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = info.CatsTVUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TEST_TARGET_NAME = CatsTV;
+			};
+			name = Debug;
+		};
+		CDD1D05E2E0DDCE800436E08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = info.CatsTVUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TEST_TARGET_NAME = CatsTV;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CDD1D0302E0DDCE600436E08 /* Build configuration list for PBXProject "CatsTV" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDD1D0542E0DDCE800436E08 /* Debug */,
+				CDD1D0552E0DDCE800436E08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CDD1D0562E0DDCE800436E08 /* Build configuration list for PBXNativeTarget "CatsTV" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDD1D0572E0DDCE800436E08 /* Debug */,
+				CDD1D0582E0DDCE800436E08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CDD1D0592E0DDCE800436E08 /* Build configuration list for PBXNativeTarget "CatsTVTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDD1D05A2E0DDCE800436E08 /* Debug */,
+				CDD1D05B2E0DDCE800436E08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CDD1D05C2E0DDCE800436E08 /* Build configuration list for PBXNativeTarget "CatsTVUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDD1D05D2E0DDCE800436E08 /* Debug */,
+				CDD1D05E2E0DDCE800436E08 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CDD1D02D2E0DDCE600436E08 /* Project object */;
+}

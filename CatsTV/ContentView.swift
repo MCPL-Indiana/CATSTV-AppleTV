@@ -67,7 +67,7 @@ struct ContentView: View {
 
     private var headerView: some View {
         HStack {
-            CATSLogoView(size: 56)
+            CATSLogoView(height: 56)
             Spacer()
             HStack(spacing: 30) {
                 Text("LIVE STREAMS")

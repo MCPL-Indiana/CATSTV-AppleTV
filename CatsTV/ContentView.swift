@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var selectedChannel: Channel?
     @State private var isPlayingStream = false
+    @State private var showArchive = false
     @FocusState private var focusedChannelID: String?
 
     private let channels = Channel.allChannels
@@ -60,6 +61,9 @@ struct ContentView: View {
                     LiveStreamPlayerView(channel: channel)
                 }
             }
+            .fullScreenCover(isPresented: $showArchive) {
+                ArchiveView()
+            }
         }
     }
 
@@ -73,6 +77,25 @@ struct ContentView: View {
                 Text("LIVE STREAMS")
                     .font(.system(size: 18, weight: .bold))
                     .foregroundStyle(CATSTheme.accentCoral)
+
+                Button {
+                    showArchive = true
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "archivebox")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("ARCHIVE")
+                            .font(.system(size: 18, weight: .bold))
+                    }
+                    .foregroundStyle(CATSTheme.textSecondary)
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(CATSTheme.backgroundMedium.opacity(0.4))
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
             }
         }
         .padding(.horizontal, 80)

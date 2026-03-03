@@ -36,22 +36,30 @@ enum ArchiveCategory: String, CaseIterable, Identifiable {
         }
     }
 
-    /// The meeterid query parameter used on government.php.
-    /// category-A = City of Bloomington, category-B = Monroe County (confirmed from site URL),
-    /// category-C = Community programming.
-    var meeterid: String {
+    /// Keywords used to match this category against dropdown labels on government.php.
+    var searchKeywords: [String] {
         switch self {
-        case .cityBloomington: return "category-A"
-        case .monroeCounty:    return "category-B"
-        case .community:       return "category-C"
+        case .cityBloomington: return ["city", "bloomington"]
+        case .monroeCounty:    return ["county", "monroe"]
+        case .community:       return ["community", "public access"]
+        }
+    }
+
+    /// Keywords that should disqualify a label from matching this category.
+    var excludeKeywords: [String] {
+        switch self {
+        case .cityBloomington: return ["county"]
+        case .monroeCounty:    return []
+        case .community:       return []
         }
     }
 
     /// Builds the government.php search URL for this category.
     /// - Parameters:
+    ///   - meeterid: The meeterid value to use (discovered or fallback).
     ///   - query: Free-text search (maps to `webquery`).
     ///   - year:  Specific year to filter, or nil for the rolling last-12-months window.
-    func searchURL(query: String, year: Int?) -> URL {
+    func searchURL(meeterid: String, query: String, year: Int?) -> URL {
         var comps = URLComponents(string: "https://catstv.net/government.php")!
         let cal  = Calendar.current
         let now  = Date()

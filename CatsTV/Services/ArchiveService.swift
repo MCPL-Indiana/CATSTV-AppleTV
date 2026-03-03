@@ -16,6 +16,10 @@ actor ArchiveService {
     // Simple in-memory cache keyed on search URL to avoid redundant requests.
     private var cache: [URL: [ArchiveVideo]] = [:]
 
+    // Discovered meeterid values from the government.php form dropdown.
+    // Populated once on first use, then reused for all subsequent requests.
+    private var discoveredMeeterIDs: [ArchiveCategory: String]?
+
     // MARK: - Public API
 
     /// Fetches the video listing for a category, applying an optional text search and year filter.
@@ -24,7 +28,8 @@ actor ArchiveService {
         query: String = "",
         year: Int? = nil
     ) async throws -> [ArchiveVideo] {
-        let url = category.searchURL(query: query, year: year)
+        let meeterid = try await resolvedMeeterid(for: category)
+        let url = category.searchURL(meeterid: meeterid, query: query, year: year)
 
         if let cached = cache[url] { return cached }
 
@@ -46,6 +51,120 @@ actor ArchiveService {
 
         // Secondary fallback: attempt direct file at /video/<id>.mp4
         return URL(string: "https://catstv.net/video/\(meetingID).mp4")
+    }
+
+    // MARK: - MeeterID Discovery
+
+    /// Returns the best meeterid value for a category, discovering values from the
+    /// government.php form dropdown on first call.
+    private func resolvedMeeterid(for category: ArchiveCategory) async throws -> String {
+        if let map = discoveredMeeterIDs, let id = map[category] {
+            return id
+        }
+
+        // Discover meeterid values from the site's form
+        let map = await discoverMeeterIDs()
+        discoveredMeeterIDs = map
+
+        return map[category] ?? "all"
+    }
+
+    /// Fetches the main government.php page and parses the meeterid <select> dropdown
+    /// to discover the correct category values for City, County, and Community.
+    private func discoverMeeterIDs() async -> [ArchiveCategory: String] {
+        guard let url = URL(string: "https://catstv.net/government.php") else { return [:] }
+
+        guard let html = try? await fetchHTML(from: url) else { return [:] }
+
+        // Extract the <select> element that contains meeterid options.
+        // The form may use name="meeterid" or similar.
+        guard let selectRE = try? NSRegularExpression(
+            pattern: #"<select[^>]*name\s*=\s*['"](meeterid|MeeterId|meeter_id)['"][^>]*>([\s\S]*?)</select>"#,
+            options: .caseInsensitive
+        ) else { return [:] }
+
+        let ns = html as NSString
+        guard let selectMatch = selectRE.firstMatch(
+            in: html,
+            range: NSRange(location: 0, length: ns.length)
+        ), selectMatch.numberOfRanges >= 3,
+              let contentRange = Range(selectMatch.range(at: 2), in: html) else {
+            return [:]
+        }
+
+        let selectHTML = String(html[contentRange])
+
+        // Extract all <option value="...">Label</option> pairs
+        guard let optionRE = try? NSRegularExpression(
+            pattern: #"<option[^>]*\bvalue\s*=\s*['"]([\w\-]+)['"][^>]*>\s*([^<]+?)\s*</option>"#,
+            options: .caseInsensitive
+        ) else { return [:] }
+
+        let optNS = selectHTML as NSString
+        var options: [(value: String, label: String)] = []
+
+        for m in optionRE.matches(in: selectHTML, range: NSRange(location: 0, length: optNS.length)) {
+            guard m.numberOfRanges >= 3,
+                  let valR = Range(m.range(at: 1), in: selectHTML),
+                  let labR = Range(m.range(at: 2), in: selectHTML) else { continue }
+            let value = String(selectHTML[valR])
+            let label = htmlDecode(
+                String(selectHTML[labR]).trimmingCharacters(in: .whitespacesAndNewlines)
+            )
+            guard !value.isEmpty, !label.isEmpty else { continue }
+            options.append((value, label))
+        }
+
+        return mapOptionsToCategories(options)
+    }
+
+    /// Maps discovered dropdown options to ArchiveCategory values.
+    /// Prefers broad category-prefixed values (e.g., "category-M") over specific
+    /// numeric board IDs (e.g., "117" for City Council).
+    private func mapOptionsToCategories(
+        _ options: [(value: String, label: String)]
+    ) -> [ArchiveCategory: String] {
+        var result: [ArchiveCategory: String] = [:]
+
+        for category in ArchiveCategory.allCases {
+            // First pass: look for broad category-prefixed values
+            for (value, label) in options {
+                guard value.hasPrefix("category-") else { continue }
+                if matchesCategory(label: label, category: category) {
+                    result[category] = value
+                    break
+                }
+            }
+
+            // Second pass: if no category-level match, try any option
+            if result[category] == nil {
+                for (value, label) in options {
+                    if matchesCategory(label: label, category: category) {
+                        result[category] = value
+                        break
+                    }
+                }
+            }
+        }
+
+        return result
+    }
+
+    /// Checks if a dropdown label matches a given ArchiveCategory based on keywords.
+    private func matchesCategory(label: String, category: ArchiveCategory) -> Bool {
+        let lower = label.lowercased()
+
+        // Check exclude keywords first
+        for kw in category.excludeKeywords {
+            if lower.contains(kw) { return false }
+        }
+
+        // Check if any search keyword matches
+        for kw in category.searchKeywords {
+            if lower.contains(kw) { return true }
+        }
+
+        return false
     }
 
     // MARK: - Networking

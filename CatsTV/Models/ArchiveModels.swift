@@ -54,14 +54,14 @@ enum ArchiveCategory: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Hardcoded fallback meeterid value. Only Monroe County (category-M) is
-    /// confirmed from indexed URLs; others return nil so the service falls
-    /// back to issearch=banner which browses all meetings.
+    /// The meeterid query parameter used on government.php.
+    /// category-B = City of Bloomington, category-M = Monroe County,
+    /// category-C = Community programming.
     var fallbackMeeterid: String? {
         switch self {
-        case .cityBloomington: return nil
+        case .cityBloomington: return "category-B"
         case .monroeCounty:    return "category-M"
-        case .community:       return nil
+        case .community:       return "category-C"
         }
     }
 

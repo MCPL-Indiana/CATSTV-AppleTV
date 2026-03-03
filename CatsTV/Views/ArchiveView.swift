@@ -65,17 +65,6 @@ struct ArchiveView: View {
 
     private var headerBar: some View {
         HStack(alignment: .center, spacing: 24) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(CATSTheme.textSecondary)
-                    .padding(10)
-                    .background(Circle().fill(CATSTheme.backgroundMedium.opacity(0.4)))
-            }
-            .buttonStyle(PlainButtonStyle())
-
             CATSLogoView(height: 48)
 
             Spacer()
@@ -97,38 +86,16 @@ struct ArchiveView: View {
     // MARK: - Category tabs
 
     private var categoryTabs: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 20) {
             ForEach(ArchiveCategory.allCases) { cat in
-                let active = selectedCategory == cat
-                Button {
+                CategoryTabButton(
+                    category: cat,
+                    isActive: selectedCategory == cat
+                ) {
                     guard selectedCategory != cat else { return }
                     selectedCategory = cat
                     videos = []
-                } label: {
-                    HStack(spacing: 10) {
-                        Image(systemName: cat.iconName)
-                            .font(.system(size: 17, weight: .medium))
-                        Text(cat.rawValue)
-                            .font(.system(size: 18, weight: active ? .bold : .medium))
-                    }
-                    .foregroundStyle(active ? CATSTheme.accentCoral : CATSTheme.textSecondary)
-                    .padding(.horizontal, 28)
-                    .padding(.vertical, 14)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(active
-                                  ? CATSTheme.backgroundDark.opacity(0.85)
-                                  : Color.clear)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(
-                                active ? CATSTheme.accentCoral.opacity(0.55) : Color.clear,
-                                lineWidth: 2
-                            )
-                    )
                 }
-                .buttonStyle(PlainButtonStyle())
             }
         }
         .padding(.horizontal, 80)
@@ -300,6 +267,51 @@ struct ArchiveView: View {
             videos   = []
         }
         isLoading = false
+    }
+}
+
+// MARK: - CategoryTabButton
+
+struct CategoryTabButton: View {
+    let category: ArchiveCategory
+    let isActive: Bool
+    let action: () -> Void
+
+    @FocusState private var isFocused: Bool
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: category.iconName)
+                    .font(.system(size: 17, weight: .medium))
+                Text(category.rawValue)
+                    .font(.system(size: 18, weight: (isActive || isFocused) ? .bold : .medium))
+            }
+            .foregroundStyle(isActive ? CATSTheme.accentCoral
+                             : isFocused ? .white
+                             : CATSTheme.textSecondary)
+            .padding(.horizontal, 28)
+            .padding(.vertical, 14)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(isActive ? CATSTheme.backgroundDark.opacity(0.85)
+                          : isFocused ? CATSTheme.backgroundMedium.opacity(0.6)
+                          : Color.clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(
+                        isActive ? CATSTheme.accentCoral.opacity(0.55)
+                        : isFocused ? CATSTheme.textSecondary.opacity(0.4)
+                        : Color.clear,
+                        lineWidth: 2
+                    )
+            )
+            .scaleEffect(isFocused ? 1.05 : 1.0)
+            .animation(.easeInOut(duration: 0.15), value: isFocused)
+        }
+        .buttonStyle(.card)
+        .focused($isFocused)
     }
 }
 

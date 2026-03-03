@@ -49,6 +49,10 @@ struct ContentView: View {
                     channelGrid
                         .padding(.horizontal, 60)
 
+                    // Archive button
+                    archiveButton
+                        .padding(.top, 40)
+
                     Spacer()
 
                     // Footer
@@ -73,30 +77,9 @@ struct ContentView: View {
         HStack {
             CATSLogoView(height: 56)
             Spacer()
-            HStack(spacing: 30) {
-                Text("LIVE STREAMS")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(CATSTheme.accentCoral)
-
-                Button {
-                    showArchive = true
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "archivebox")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("ARCHIVE")
-                            .font(.system(size: 18, weight: .bold))
-                    }
-                    .foregroundStyle(CATSTheme.textSecondary)
-                    .padding(.horizontal, 18)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(CATSTheme.backgroundMedium.opacity(0.4))
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
+            Text("LIVE STREAMS")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(CATSTheme.accentCoral)
         }
         .padding(.horizontal, 80)
         .padding(.vertical, 16)
@@ -133,6 +116,33 @@ struct ContentView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Archive Button
+
+    private var archiveButton: some View {
+        Button {
+            showArchive = true
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "archivebox")
+                    .font(.system(size: 20, weight: .semibold))
+                Text("VIDEO ARCHIVE")
+                    .font(.system(size: 22, weight: .bold))
+            }
+            .foregroundStyle(CATSTheme.textSecondary)
+            .frame(width: 400)
+            .padding(.vertical, 14)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(CATSTheme.backgroundMedium.opacity(0.4))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(CATSTheme.textMuted.opacity(0.3), lineWidth: 1)
+            )
+        }
+        .buttonStyle(CardButtonStyle())
     }
 
     // MARK: - Footer

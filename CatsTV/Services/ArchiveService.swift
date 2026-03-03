@@ -17,8 +17,8 @@ actor ArchiveService {
     private var cache: [URL: [ArchiveVideo]] = [:]
 
     // Discovered meeterid values from the government.php form dropdown.
-    // Populated once on first use, then reused for all subsequent requests.
     private var discoveredMeeterIDs: [ArchiveCategory: String]?
+    private var discoveryAttempted = false
 
     // MARK: - Public API
 
@@ -28,14 +28,32 @@ actor ArchiveService {
         query: String = "",
         year: Int? = nil
     ) async throws -> [ArchiveVideo] {
-        let meeterid = try await resolvedMeeterid(for: category)
+        let meeterid = await resolvedMeeterid(for: category)
         let url = category.searchURL(meeterid: meeterid, query: query, year: year)
 
         if let cached = cache[url] { return cached }
 
         let html    = try await fetchHTML(from: url)
         let videos  = parseVideoList(html: html, category: category)
-        cache[url]  = videos
+
+        if !videos.isEmpty {
+            cache[url] = videos
+            return videos
+        }
+
+        // If no results and we used a meeterid, retry without it.
+        // issearch=banner (no meeterid) browses all meetings.
+        if meeterid != nil {
+            let fallbackURL = category.searchURL(meeterid: nil, query: query, year: year)
+            if let cached = cache[fallbackURL] { return cached }
+
+            let fallbackHTML = try await fetchHTML(from: fallbackURL)
+            let fallbackVideos = parseVideoList(html: fallbackHTML, category: category)
+            cache[fallbackURL] = fallbackVideos
+            return fallbackVideos
+        }
+
+        cache[url] = videos
         return videos
     }
 
@@ -55,61 +73,84 @@ actor ArchiveService {
 
     // MARK: - MeeterID Discovery
 
-    /// Returns the best meeterid value for a category, discovering values from the
-    /// government.php form dropdown on first call.
-    private func resolvedMeeterid(for category: ArchiveCategory) async throws -> String {
+    /// Returns the best meeterid value for a category.
+    /// Tries discovered values first, then hardcoded fallbacks, then nil (browse all).
+    private func resolvedMeeterid(for category: ArchiveCategory) async -> String? {
+        if !discoveryAttempted {
+            discoveryAttempted = true
+            discoveredMeeterIDs = await discoverMeeterIDs()
+        }
+
         if let map = discoveredMeeterIDs, let id = map[category] {
             return id
         }
 
-        // Discover meeterid values from the site's form
-        let map = await discoverMeeterIDs()
-        discoveredMeeterIDs = map
-
-        return map[category] ?? "all"
+        return category.fallbackMeeterid
     }
 
     /// Fetches the main government.php page and parses the meeterid <select> dropdown
     /// to discover the correct category values for City, County, and Community.
     private func discoverMeeterIDs() async -> [ArchiveCategory: String] {
         guard let url = URL(string: "https://catstv.net/government.php") else { return [:] }
-
         guard let html = try? await fetchHTML(from: url) else { return [:] }
 
-        // Extract the <select> element that contains meeterid options.
-        // The form may use name="meeterid" or similar.
-        guard let selectRE = try? NSRegularExpression(
-            pattern: #"<select[^>]*name\s*=\s*['"](meeterid|MeeterId|meeter_id)['"][^>]*>([\s\S]*?)</select>"#,
-            options: .caseInsensitive
-        ) else { return [:] }
+        // Try multiple patterns to find the meeterid <select> element.
+        let selectPatterns = [
+            #"<select[^>]*name\s*=\s*['"]meeterid['"][^>]*>([\s\S]*?)</select>"#,
+            #"<select[^>]*name\s*=\s*meeterid[^>]*>([\s\S]*?)</select>"#,
+            #"<select[^>]*id\s*=\s*['"]meeterid['"][^>]*>([\s\S]*?)</select>"#,
+        ]
 
+        var selectContent: String?
         let ns = html as NSString
-        guard let selectMatch = selectRE.firstMatch(
-            in: html,
-            range: NSRange(location: 0, length: ns.length)
-        ), selectMatch.numberOfRanges >= 3,
-              let contentRange = Range(selectMatch.range(at: 2), in: html) else {
-            return [:]
+
+        for pattern in selectPatterns {
+            guard let re = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) else { continue }
+            if let m = re.firstMatch(in: html, range: NSRange(location: 0, length: ns.length)),
+               m.numberOfRanges >= 2,
+               let r = Range(m.range(at: 1), in: html) {
+                selectContent = String(html[r])
+                break
+            }
         }
 
-        let selectHTML = String(html[contentRange])
+        // If no named meeterid select found, try any <select> with category-like options.
+        if selectContent == nil {
+            if let anyRE = try? NSRegularExpression(
+                pattern: #"<select[^>]*>([\s\S]*?)</select>"#,
+                options: .caseInsensitive
+            ) {
+                for m in anyRE.matches(in: html, range: NSRange(location: 0, length: ns.length)) {
+                    guard m.numberOfRanges >= 2,
+                          let r = Range(m.range(at: 1), in: html) else { continue }
+                    let content = String(html[r])
+                    if content.contains("category-") || content.lowercased().contains("county") {
+                        selectContent = content
+                        break
+                    }
+                }
+            }
+        }
 
-        // Extract all <option value="...">Label</option> pairs
+        guard let content = selectContent else { return [:] }
+
+        // Parse <option> tags. HTML often omits </option>, so match value and the
+        // text after > until the next < tag.
         guard let optionRE = try? NSRegularExpression(
-            pattern: #"<option[^>]*\bvalue\s*=\s*['"]([\w\-]+)['"][^>]*>\s*([^<]+?)\s*</option>"#,
+            pattern: #"<option[^>]*\bvalue\s*=\s*['"]?([\w\-]+)['"]?[^>]*>\s*([^<]+)"#,
             options: .caseInsensitive
         ) else { return [:] }
 
-        let optNS = selectHTML as NSString
+        let optNS = content as NSString
         var options: [(value: String, label: String)] = []
 
-        for m in optionRE.matches(in: selectHTML, range: NSRange(location: 0, length: optNS.length)) {
+        for m in optionRE.matches(in: content, range: NSRange(location: 0, length: optNS.length)) {
             guard m.numberOfRanges >= 3,
-                  let valR = Range(m.range(at: 1), in: selectHTML),
-                  let labR = Range(m.range(at: 2), in: selectHTML) else { continue }
-            let value = String(selectHTML[valR])
+                  let valR = Range(m.range(at: 1), in: content),
+                  let labR = Range(m.range(at: 2), in: content) else { continue }
+            let value = String(content[valR])
             let label = htmlDecode(
-                String(selectHTML[labR]).trimmingCharacters(in: .whitespacesAndNewlines)
+                String(content[labR]).trimmingCharacters(in: .whitespacesAndNewlines)
             )
             guard !value.isEmpty, !label.isEmpty else { continue }
             options.append((value, label))
@@ -190,9 +231,12 @@ actor ArchiveService {
     /// Scans the government.php HTML for anchor tags pointing to m.php?q=<id>
     /// and extracts title, date, and duration from the surrounding context.
     private func parseVideoList(html: String, category: ArchiveCategory) -> [ArchiveVideo] {
-        // Match:  href="m.php?q=12345"  or  href='/m.php?q=12345'  (with optional leading /)
+        // Match links to m.php?q=<id> in multiple formats:
+        //   href="m.php?q=12345"                       (relative)
+        //   href="/m.php?q=12345"                      (root-relative)
+        //   href="https://catstv.net/m.php?q=12345"    (absolute)
         guard let linkRE = try? NSRegularExpression(
-            pattern: #"href=['"](/?)m\.php\?q=(\d+)[^'"]*['"][^>]*>\s*([^<]+?)\s*</a>"#,
+            pattern: #"href=['"](?:https?://[^'"]*?)?/?m\.php\?q=(\d+)[^'"]*['"][^>]*>\s*([^<]+?)\s*</a>"#,
             options: .caseInsensitive
         ) else { return [] }
 
@@ -210,9 +254,9 @@ actor ArchiveService {
         var out   = [ArchiveVideo]()
 
         for m in linkRE.matches(in: html, range: NSRange(location: 0, length: ns.length)) {
-            guard m.numberOfRanges >= 4,
-                  let idR    = Range(m.range(at: 2), in: html),
-                  let titleR = Range(m.range(at: 3), in: html) else { continue }
+            guard m.numberOfRanges >= 3,
+                  let idR    = Range(m.range(at: 1), in: html),
+                  let titleR = Range(m.range(at: 2), in: html) else { continue }
 
             let mid   = String(html[idR])
             let title = htmlDecode(

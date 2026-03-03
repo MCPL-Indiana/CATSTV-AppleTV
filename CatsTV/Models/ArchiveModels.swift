@@ -54,12 +54,23 @@ enum ArchiveCategory: String, CaseIterable, Identifiable {
         }
     }
 
+    /// Hardcoded fallback meeterid value. Only Monroe County (category-M) is
+    /// confirmed from indexed URLs; others return nil so the service falls
+    /// back to issearch=banner which browses all meetings.
+    var fallbackMeeterid: String? {
+        switch self {
+        case .cityBloomington: return nil
+        case .monroeCounty:    return "category-M"
+        case .community:       return nil
+        }
+    }
+
     /// Builds the government.php search URL for this category.
     /// - Parameters:
-    ///   - meeterid: The meeterid value to use (discovered or fallback).
+    ///   - meeterid: The meeterid value, or nil to browse all meetings via issearch=banner.
     ///   - query: Free-text search (maps to `webquery`).
     ///   - year:  Specific year to filter, or nil for the rolling last-12-months window.
-    func searchURL(meeterid: String, query: String, year: Int?) -> URL {
+    func searchURL(meeterid: String?, query: String, year: Int?) -> URL {
         var comps = URLComponents(string: "https://catstv.net/government.php")!
         let cal  = Calendar.current
         let now  = Date()
@@ -70,15 +81,19 @@ enum ArchiveCategory: String, CaseIterable, Identifiable {
             (y, 1, y, 12)
         } ?? (curY - 1, curM, curY, curM)
 
-        comps.queryItems = [
-            .init(name: "issearch", value: "yes"),
+        // Use issearch=yes when we have a specific meeterid; issearch=banner otherwise.
+        var items: [URLQueryItem] = [
+            .init(name: "issearch", value: meeterid != nil ? "yes" : "banner"),
             .init(name: "webquery", value: query),
             .init(name: "minyear",  value: "\(minY)"),
             .init(name: "minmonth", value: String(format: "%02d", minM)),
             .init(name: "maxyear",  value: "\(maxY)"),
             .init(name: "maxmonth", value: String(format: "%02d", maxM)),
-            .init(name: "meeterid", value: meeterid),
         ]
+        if let mid = meeterid {
+            items.append(.init(name: "meeterid", value: mid))
+        }
+        comps.queryItems = items
         return comps.url!
     }
 }

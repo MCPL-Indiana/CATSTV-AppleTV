@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var isPlayingStream = false
     @State private var showArchive = false
     @FocusState private var focusedChannelID: String?
+    @FocusState private var archiveFocused: Bool
 
     private let channels = Channel.allChannels
 
@@ -94,7 +95,7 @@ struct ContentView: View {
     private var channelGrid: some View {
         HStack(spacing: 36) {
             ForEach(channels) { channel in
-                let isSelected = selectedChannel?.id == channel.id
+                let isSelected = selectedChannel?.id == channel.id && !archiveFocused
                 let isFocused = focusedChannelID == channel.id
 
                 Button {
@@ -130,19 +131,27 @@ struct ContentView: View {
                 Text("VIDEO ARCHIVE")
                     .font(.system(size: 22, weight: .bold))
             }
-            .foregroundStyle(CATSTheme.textSecondary)
+            .foregroundStyle(archiveFocused ? .white : CATSTheme.textSecondary)
             .frame(width: 400)
             .padding(.vertical, 14)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(CATSTheme.backgroundMedium.opacity(0.4))
+                    .fill(archiveFocused
+                          ? CATSTheme.backgroundDark.opacity(0.95)
+                          : CATSTheme.backgroundMedium.opacity(0.4))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(CATSTheme.textMuted.opacity(0.3), lineWidth: 1)
+                    .strokeBorder(
+                        archiveFocused ? CATSTheme.accentCoral : CATSTheme.textMuted.opacity(0.3),
+                        lineWidth: archiveFocused ? 3 : 1
+                    )
             )
+            .scaleEffect(archiveFocused ? 1.05 : 1.0)
+            .animation(.easeInOut(duration: 0.2), value: archiveFocused)
         }
         .buttonStyle(CardButtonStyle())
+        .focused($archiveFocused)
     }
 
     // MARK: - Footer

@@ -95,8 +95,8 @@ struct ContentView: View {
     private var channelGrid: some View {
         HStack(spacing: 36) {
             ForEach(channels) { channel in
-                let isSelected = selectedChannel?.id == channel.id
                 let isFocused = focusedChannelID == channel.id
+                let isSelected = isFocused
 
                 Button {
                     selectedChannel = channel

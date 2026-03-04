@@ -5,6 +5,13 @@
 //  Horizontal scrolling section that loads City Meeting videos from the CATS
 //  JSON feed and lets users browse and play them.
 //
+//  Focus approach mirrors ContentView/ChannelCardView:
+//    • CityMeetingCardView is a pure rendering View (no Button, no FocusState)
+//    • CityMeetingsSection owns @FocusState and wraps each card in a Button
+//      with CardButtonStyle, which suppresses tvOS's built-in focus halo
+//    • All focus visuals (coral glow shadow, scale, border) live inside
+//      CityMeetingCardView, driven by the isFocused Bool prop
+//
 
 import SwiftUI
 
@@ -16,6 +23,7 @@ struct CityMeetingsSection: View {
     @State private var errorMessage: String?
     @State private var selectedVideo: CityMeetingVideo?
     @State private var isPlaying = false
+    @FocusState private var focusedID: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -52,10 +60,16 @@ struct CityMeetingsSection: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 24) {
                         ForEach(videos) { video in
-                            CityMeetingCardView(video: video) {
+                            let isFocused = focusedID == video.id
+
+                            Button {
                                 selectedVideo = video
                                 isPlaying = true
+                            } label: {
+                                CityMeetingCardView(video: video, isFocused: isFocused)
                             }
+                            .buttonStyle(CardButtonStyle())
+                            .focused($focusedID, equals: video.id)
                         }
                     }
                     .padding(.horizontal, 60)
@@ -83,66 +97,70 @@ struct CityMeetingsSection: View {
     }
 }
 
-// MARK: - Individual card
+// MARK: - Pure card view (no Button, no FocusState — mirrors ChannelCardView)
 
 struct CityMeetingCardView: View {
     let video: CityMeetingVideo
-    let action: () -> Void
-
-    @FocusState private var isFocused: Bool
+    let isFocused: Bool
 
     private let cardWidth: CGFloat = 320
     private let thumbnailHeight: CGFloat = 180
 
     var body: some View {
-        Button(action: action) {
-            VStack(alignment: .leading, spacing: 0) {
-                // Thumbnail
-                AsyncImage(url: video.thumbnailURL) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    case .failure, .empty:
-                        ZStack {
-                            CATSTheme.backgroundMedium
-                            Image(systemName: "film")
-                                .font(.system(size: 40))
-                                .foregroundStyle(CATSTheme.textMuted)
-                        }
-                    @unknown default:
+        VStack(alignment: .leading, spacing: 0) {
+            // Thumbnail
+            AsyncImage(url: video.thumbnailURL) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                case .failure, .empty:
+                    ZStack {
                         CATSTheme.backgroundMedium
+                        Image(systemName: "film")
+                            .font(.system(size: 40))
+                            .foregroundStyle(CATSTheme.textMuted)
                     }
+                @unknown default:
+                    CATSTheme.backgroundMedium
                 }
-                .frame(width: cardWidth, height: thumbnailHeight)
-                .clipped()
-
-                // Title
-                Text(video.title)
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(CATSTheme.textPrimary)
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-                    .frame(width: cardWidth, alignment: .leading)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 10)
-                    .background(CATSTheme.backgroundDark)
             }
-            .frame(width: cardWidth)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(isFocused ? CATSTheme.accentCoral : Color.clear, lineWidth: 3)
-            )
-            .shadow(
-                color: .black.opacity(isFocused ? 0.5 : 0.2),
-                radius: isFocused ? 20 : 8
-            )
-            .scaleEffect(isFocused ? 1.06 : 1.0)
-            .animation(.easeInOut(duration: 0.2), value: isFocused)
+            .frame(width: cardWidth, height: thumbnailHeight)
+            .clipped()
+
+            // Title
+            Text(video.title)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(
+                    isFocused ? CATSTheme.accentCoral : CATSTheme.textPrimary
+                )
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+                .frame(width: cardWidth, alignment: .leading)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(
+                    isFocused
+                        ? CATSTheme.backgroundDark.opacity(0.95)
+                        : CATSTheme.backgroundMedium.opacity(0.6)
+                )
         }
-        .buttonStyle(PlainButtonStyle())
-        .focused($isFocused)
+        .frame(width: cardWidth)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(
+                    isFocused ? CATSTheme.accentCoral : Color.clear,
+                    lineWidth: 3
+                )
+        )
+        .scaleEffect(isFocused ? 1.08 : 1.0)
+        .shadow(
+            color: isFocused ? CATSTheme.accentCoral.opacity(0.4) : .black.opacity(0.3),
+            radius: isFocused ? 20 : 8,
+            y: isFocused ? 8 : 4
+        )
+        .animation(.easeInOut(duration: 0.2), value: isFocused)
     }
 }

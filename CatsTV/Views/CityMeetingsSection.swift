@@ -27,6 +27,17 @@ struct CityMeetingsSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
+            // Section header
+            HStack(spacing: 10) {
+                Image(systemName: "building.columns")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundStyle(CATSTheme.accentCoral)
+                Text("CITY MEETINGS")
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundStyle(CATSTheme.textPrimary)
+            }
+            .padding(.horizontal, 60)
+
             // Content
             if isLoading {
                 HStack(spacing: 12) {

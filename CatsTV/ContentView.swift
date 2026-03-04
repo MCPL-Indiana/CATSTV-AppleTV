@@ -29,9 +29,14 @@ struct ContentView: View {
 
                         // "WATCH CATS LIVE" heading
                         VStack(spacing: 8) {
-                            Text("WATCH CATS LIVE")
+                            (
+                            Text("WATCH CATS ")
                                 .font(.system(size: 36, weight: .bold))
                                 .foregroundStyle(CATSTheme.textPrimary)
+                            + Text("LIVE")
+                                .font(.system(size: 36, weight: .bold))
+                                .foregroundStyle(CATSTheme.accentCoral)
+                        )
                             Text("Select a channel to start watching")
                                 .font(.system(size: 20, weight: .regular))
                                 .foregroundStyle(CATSTheme.textSecondary)

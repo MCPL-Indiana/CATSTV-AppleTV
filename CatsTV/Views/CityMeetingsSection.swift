@@ -137,9 +137,9 @@ struct CityMeetingCardView: View {
                 )
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
-                .frame(width: cardWidth, alignment: .leading)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 10)
+                .frame(width: cardWidth, alignment: .leading)
                 .background(
                     isFocused
                         ? CATSTheme.backgroundDark.opacity(0.95)

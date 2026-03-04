@@ -172,7 +172,20 @@ struct CityMeetingPlayerView: View {
             cues = parseVTT(text)
         }
 
-        let avPlayer = AVPlayer(url: video.videoURL)
+        let item = AVPlayerItem(url: video.videoURL)
+        let avPlayer = AVPlayer(playerItem: item)
+        avPlayer.automaticallyWaitsToMinimizeStalling = true
+
+        // Wait for the item to be ready before playing so it doesn't hang
+        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+            var obs: NSKeyValueObservation?
+            obs = item.observe(\.status, options: [.initial, .new]) { item, _ in
+                guard item.status == .readyToPlay || item.status == .failed else { return }
+                obs?.invalidate()
+                obs = nil
+                continuation.resume()
+            }
+        }
 
         // Attach periodic observer for subtitle sync (~4 times/sec)
         let interval = CMTime(seconds: 0.25, preferredTimescale: CMTimeScale(NSEC_PER_SEC))

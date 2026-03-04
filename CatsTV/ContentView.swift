@@ -29,14 +29,9 @@ struct ContentView: View {
 
                         // "WATCH CATS LIVE" heading
                         VStack(spacing: 8) {
-                            HStack(spacing: 10) {
-                                Text("WATCH CATS")
-                                    .font(.system(size: 36, weight: .bold))
-                                    .foregroundStyle(CATSTheme.textPrimary)
-                                Text("LIVE")
-                                    .font(.system(size: 36, weight: .bold))
-                                    .foregroundStyle(CATSTheme.accentCoral)
-                            }
+                            Text("WATCH CATS LIVE")
+                                .font(.system(size: 36, weight: .bold))
+                                .foregroundStyle(CATSTheme.textPrimary)
                             Text("Select a channel to start watching")
                                 .font(.system(size: 20, weight: .regular))
                                 .foregroundStyle(CATSTheme.textSecondary)
@@ -47,20 +42,24 @@ struct ContentView: View {
                         channelGrid
                             .padding(.horizontal, 60)
 
-                        // Divider before City Meetings
+                        // Divider before archive section
                         Rectangle()
                             .fill(CATSTheme.backgroundMedium.opacity(0.4))
                             .frame(height: 1)
                             .padding(.horizontal, 60)
                             .padding(.top, 36)
 
+                        // "CATS ARCHIVE" section heading
+                        Text("CATS ARCHIVE")
+                            .font(.system(size: 26, weight: .bold))
+                            .foregroundStyle(CATSTheme.textPrimary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top, 24)
+
                         // City Meetings video section
                         CityMeetingsSection()
-                            .padding(.top, 24)
+                            .padding(.top, 16)
                             .padding(.bottom, 20)
-
-                        // Footer
-                        footerView
                     }
                 }
             }
@@ -119,24 +118,6 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Footer
-
-    private var footerView: some View {
-        VStack(spacing: 4) {
-            Text("Community Access Television Services")
-                .font(.system(size: 15, weight: .medium))
-                .foregroundStyle(CATSTheme.textSecondary)
-            Text("303 E. Kirkwood Ave. \u{2022} Bloomington, IN 47408 \u{2022} (812) 349-3111")
-                .font(.system(size: 13, weight: .regular))
-                .foregroundStyle(CATSTheme.textMuted)
-        }
-        .padding(.vertical, 12)
-        .frame(maxWidth: .infinity)
-        .background(
-            Rectangle()
-                .fill(CATSTheme.footerGray.opacity(0.3))
-        )
-    }
 }
 
 // MARK: - Card Button Style (for tvOS focus)

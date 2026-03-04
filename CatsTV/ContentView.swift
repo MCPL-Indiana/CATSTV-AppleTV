@@ -10,7 +10,6 @@ import SwiftUI
 struct ContentView: View {
     @State private var selectedChannel: Channel?
     @State private var isPlayingStream = false
-    @State private var showArchive = false
     @FocusState private var focusedChannelID: String?
 
     private let channels = Channel.allChannels
@@ -22,47 +21,53 @@ struct ContentView: View {
                 CATSTheme.appBackgroundGradient
                     .ignoresSafeArea()
 
-                VStack(spacing: 0) {
-                    // Header with CATS logo
-                    headerView
-                        .padding(.top, 20)
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        // Header with CATS logo
+                        headerView
+                            .padding(.top, 20)
 
-                    Spacer()
-
-                    // "WATCH CATS LIVE" heading
-                    VStack(spacing: 8) {
-                        HStack(spacing: 10) {
-                            Text("WATCH CATS")
-                                .font(.system(size: 36, weight: .bold))
-                                .foregroundStyle(CATSTheme.textPrimary)
-                            Text("LIVE")
-                                .font(.system(size: 36, weight: .bold))
-                                .foregroundStyle(CATSTheme.accentCoral)
+                        // "WATCH CATS LIVE" heading
+                        VStack(spacing: 8) {
+                            HStack(spacing: 10) {
+                                Text("WATCH CATS")
+                                    .font(.system(size: 36, weight: .bold))
+                                    .foregroundStyle(CATSTheme.textPrimary)
+                                Text("LIVE")
+                                    .font(.system(size: 36, weight: .bold))
+                                    .foregroundStyle(CATSTheme.accentCoral)
+                            }
+                            Text("Select a channel to start watching")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundStyle(CATSTheme.textSecondary)
                         }
-                        Text("Select a channel to start watching")
-                            .font(.system(size: 20, weight: .regular))
-                            .foregroundStyle(CATSTheme.textSecondary)
+                        .padding(.vertical, 36)
+
+                        // Channel selection grid
+                        channelGrid
+                            .padding(.horizontal, 60)
+
+                        // Divider before City Meetings
+                        Rectangle()
+                            .fill(CATSTheme.backgroundMedium.opacity(0.4))
+                            .frame(height: 1)
+                            .padding(.horizontal, 60)
+                            .padding(.top, 36)
+
+                        // City Meetings video section
+                        CityMeetingsSection()
+                            .padding(.top, 24)
+                            .padding(.bottom, 20)
+
+                        // Footer
+                        footerView
                     }
-                    .padding(.bottom, 40)
-
-                    // Channel selection grid
-                    channelGrid
-                        .padding(.horizontal, 60)
-
-                    Spacer()
-
-                    // Footer
-                    footerView
-                        .padding(.bottom, 20)
                 }
             }
             .fullScreenCover(isPresented: $isPlayingStream) {
                 if let channel = selectedChannel {
                     LiveStreamPlayerView(channel: channel)
                 }
-            }
-            .fullScreenCover(isPresented: $showArchive) {
-                ArchiveView()
             }
         }
     }
@@ -73,30 +78,9 @@ struct ContentView: View {
         HStack {
             CATSLogoView(height: 56)
             Spacer()
-            HStack(spacing: 30) {
-                Text("LIVE STREAMS")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(CATSTheme.accentCoral)
-
-                Button {
-                    showArchive = true
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "archivebox")
-                            .font(.system(size: 16, weight: .semibold))
-                        Text("ARCHIVE")
-                            .font(.system(size: 18, weight: .bold))
-                    }
-                    .foregroundStyle(CATSTheme.textSecondary)
-                    .padding(.horizontal, 18)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(CATSTheme.backgroundMedium.opacity(0.4))
-                    )
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
+            Text("LIVE STREAMS")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(CATSTheme.accentCoral)
         }
         .padding(.horizontal, 80)
         .padding(.vertical, 16)

@@ -12,7 +12,6 @@ struct ContentView: View {
     @State private var isPlayingStream = false
     @State private var showArchive = false
     @State private var catsweekVideos: [YouTubeVideo] = []
-    @State private var selectedYouTubeVideo: YouTubeVideo?
     @FocusState private var focusedChannelID: String?
     @FocusState private var archiveFocused: Bool
 
@@ -74,9 +73,6 @@ struct ContentView: View {
             }
             .fullScreenCover(isPresented: $showArchive) {
                 ArchiveView()
-            }
-            .fullScreenCover(item: $selectedYouTubeVideo) { video in
-                YouTubePlayerView(video: video)
             }
             .task {
                 await loadCATSweek()
@@ -179,7 +175,7 @@ struct ContentView: View {
                 HStack(spacing: 24) {
                     ForEach(catsweekVideos) { video in
                         CATSweekCardView(video: video) {
-                            selectedYouTubeVideo = video
+                            openYouTube(videoID: video.id)
                         }
                     }
                 }
@@ -195,6 +191,17 @@ struct ContentView: View {
             catsweekVideos = try await YouTubeService.shared.fetchPlaylist(id: catsweekPlaylistID)
         } catch {
             catsweekVideos = []
+        }
+    }
+
+    private func openYouTube(videoID: String) {
+        let appURL = URL(string: "youtube://watch?v=\(videoID)")!
+        let webURL = URL(string: "https://www.youtube.com/watch?v=\(videoID)")!
+        let app = UIApplication.shared
+        if app.canOpenURL(appURL) {
+            app.open(appURL)
+        } else {
+            app.open(webURL)
         }
     }
 }

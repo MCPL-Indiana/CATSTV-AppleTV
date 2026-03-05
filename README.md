@@ -36,10 +36,20 @@ xcodebuild test -scheme CatsTV \
   -destination 'platform=tvOS Simulator,name=Apple TV'
 ```
 
+## Most Recent Videos
+
+Below the live channel grid, the app surfaces three on-demand video sections pulled from the CATS/MCPL JSON feeds:
+
+- **Government Meetings** — City and county government meeting recordings
+- **Community Videos** — Community-produced programming
+- **CATSWeek** — Weekly CATS highlight videos
+
+Each section is a horizontally scrollable row of thumbnail cards. Selecting a card opens a full-screen player (`CityMeetingPlayerView`) with synced closed captions rendered from the companion VTT file.
+
 ## Tech Stack
 
 - **Swift** + **SwiftUI** (tvOS focus engine, `fullScreenCover`)
-- **AVKit** for HLS live stream playback
+- **AVKit** for HLS live stream playback and on-demand `.m4v` video
 - Zero third-party dependencies
 
 ## License

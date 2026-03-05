@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-CatsTV is a tvOS app (Apple TV) for CATS (Community Access Television Services) in Bloomington, IN. It provides a live stream viewer for four public access TV channels via HLS streaming.
+CatsTV is a tvOS app (Apple TV) for CATS (Community Access Television Services) in Bloomington, IN. It provides a live stream viewer for four public access TV channels via HLS streaming, plus a "Most Recent Videos" section with on-demand government meeting, community, and CATSWeek recordings.
 
 ## Tech Stack
 
@@ -19,15 +19,24 @@ CatsTV is a tvOS app (Apple TV) for CATS (Community Access Television Services) 
 ```
 CatsTV/
 ├── CatsTVApp.swift              # @main app entry point
-├── ContentView.swift            # Root view - header, channel grid, footer
+├── ContentView.swift            # Root view - header, channel grid, recent videos sections
 ├── Models/
-│   └── Channel.swift            # Channel model with static allChannels data
+│   ├── Channel.swift            # Channel model with static allChannels data
+│   └── CityMeetingVideo.swift   # Shared model for on-demand video entries (title, m4v, vtt, thumbnail)
+├── Services/
+│   ├── CityMeetingsService.swift   # Fetches city.json feed (Government Meetings)
+│   ├── CommunityVideosService.swift # Fetches community.json feed (Community Videos)
+│   └── CATSWeekService.swift       # Fetches catsweek.json feed (CATSWeek)
 ├── Theme/
 │   └── CATSTheme.swift          # Centralized colors, gradients, and styling
 ├── Views/
 │   ├── CATSLogoView.swift       # CATS banner logo (image asset)
 │   ├── ChannelCardView.swift    # Focusable channel card with LIVE badge
-│   └── LiveStreamPlayerView.swift  # Full-screen AVPlayer view
+│   ├── LiveStreamPlayerView.swift  # Full-screen AVPlayer view for live HLS streams
+│   ├── CityMeetingsSection.swift   # Horizontal scroll row — Government Meetings cards
+│   ├── CommunityVideosSection.swift # Horizontal scroll row — Community Videos cards
+│   ├── CATSWeekSection.swift       # Horizontal scroll row — CATSWeek cards
+│   └── CityMeetingPlayerView.swift # Full-screen player for on-demand videos with VTT captions
 └── Assets.xcassets/
     └── CATSLogo.imageset/       # Official CATS logo PNG
 ```
@@ -35,6 +44,18 @@ CatsTV/
 ## Architecture
 
 Lightweight Model-View pattern. No ViewModels — state is managed directly in views via `@State` and `@FocusState`. The theme is a caseless `enum` namespace with static properties.
+
+## Most Recent Videos
+
+Below the live channel grid, `ContentView` renders a "MOST RECENT VIDEOS" heading followed by three horizontal-scrolling sections. Each section is self-contained: it owns its own `@State` / `@FocusState`, fetches its feed on `.task`, and presents `CityMeetingPlayerView` via `fullScreenCover`.
+
+| Section | View | Service | Feed URL |
+|---|---|---|---|
+| Government Meetings | `CityMeetingsSection` | `CityMeetingsService` | `mcpl.info/catsjson/city.json` |
+| Community Videos | `CommunityVideosSection` | `CommunityVideosService` | `mcpl.info/catsjson/community.json` |
+| CATSWeek | `CATSWeekSection` | `CATSWeekService` | `mcpl.info/catsjson/catsweek.json` |
+
+All three use `CityMeetingVideo` as the shared model and `CityMeetingCardView` for rendering thumbnail cards. `CityMeetingPlayerView` plays the `.m4v` file and renders closed captions by parsing the companion `.vtt` file and syncing cues with a periodic `AVPlayer` time observer.
 
 ## Build Commands
 

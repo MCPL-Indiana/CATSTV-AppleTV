@@ -54,8 +54,8 @@ struct ContentView: View {
                             .padding(.horizontal, 60)
                             .padding(.top, 36)
 
-                        // "Latest Videos" section heading
-                        Text("Latest Videos")
+                        // "Most Recent Videos" section heading
+                        Text("MOST RECENT VIDEOS")
                             .font(.system(size: 26, weight: .bold))
                             .foregroundStyle(CATSTheme.textPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)

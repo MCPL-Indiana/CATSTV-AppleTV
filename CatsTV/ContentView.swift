@@ -21,38 +21,59 @@ struct ContentView: View {
                 CATSTheme.appBackgroundGradient
                     .ignoresSafeArea()
 
-                VStack(spacing: 0) {
-                    // Header with CATS logo
-                    headerView
-                        .padding(.top, 20)
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        // Header with CATS logo
+                        headerView
+                            .padding(.top, 20)
 
-                    Spacer()
-
-                    // "WATCH CATS LIVE" heading
-                    VStack(spacing: 8) {
-                        HStack(spacing: 10) {
-                            Text("WATCH CATS")
+                        // "WATCH CATS LIVE" heading
+                        VStack(spacing: 8) {
+                            (
+                            Text("WATCH CATS ")
                                 .font(.system(size: 36, weight: .bold))
                                 .foregroundStyle(CATSTheme.textPrimary)
-                            Text("LIVE")
+                            + Text("LIVE")
                                 .font(.system(size: 36, weight: .bold))
                                 .foregroundStyle(CATSTheme.accentCoral)
+                        )
+                            Text("Select a channel to start watching")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundStyle(CATSTheme.textSecondary)
                         }
-                        Text("Select a channel to start watching")
-                            .font(.system(size: 20, weight: .regular))
-                            .foregroundStyle(CATSTheme.textSecondary)
+                        .padding(.vertical, 36)
+
+                        // Channel selection grid
+                        channelGrid
+                            .padding(.horizontal, 60)
+
+                        // Divider before archive section
+                        Rectangle()
+                            .fill(CATSTheme.backgroundMedium.opacity(0.4))
+                            .frame(height: 1)
+                            .padding(.horizontal, 60)
+                            .padding(.top, 36)
+
+                        // "Latest Videos" section heading
+                        Text("Latest Videos")
+                            .font(.system(size: 26, weight: .bold))
+                            .foregroundStyle(CATSTheme.textPrimary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top, 24)
+
+                        // Government Meetings video section
+                        CityMeetingsSection()
+                            .padding(.top, 16)
+
+                        // Community Videos section
+                        CommunityVideosSection()
+                            .padding(.top, 16)
+
+                        // CATSWeek video section
+                        CATSWeekSection()
+                            .padding(.top, 16)
+                            .padding(.bottom, 20)
                     }
-                    .padding(.bottom, 40)
-
-                    // Channel selection grid
-                    channelGrid
-                        .padding(.horizontal, 60)
-
-                    Spacer()
-
-                    // Footer
-                    footerView
-                        .padding(.bottom, 20)
                 }
             }
             .fullScreenCover(isPresented: $isPlayingStream) {
@@ -69,11 +90,9 @@ struct ContentView: View {
         HStack {
             CATSLogoView(height: 56)
             Spacer()
-            HStack(spacing: 30) {
-                Text("LIVE STREAMS")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(CATSTheme.accentCoral)
-            }
+            Text("LIVE STREAMS")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(CATSTheme.accentCoral)
         }
         .padding(.horizontal, 80)
         .padding(.vertical, 16)
@@ -88,8 +107,8 @@ struct ContentView: View {
     private var channelGrid: some View {
         HStack(spacing: 36) {
             ForEach(channels) { channel in
-                let isSelected = selectedChannel?.id == channel.id
                 let isFocused = focusedChannelID == channel.id
+                let isSelected = isFocused
 
                 Button {
                     selectedChannel = channel
@@ -112,24 +131,6 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Footer
-
-    private var footerView: some View {
-        VStack(spacing: 4) {
-            Text("Community Access Television Services")
-                .font(.system(size: 15, weight: .medium))
-                .foregroundStyle(CATSTheme.textSecondary)
-            Text("303 E. Kirkwood Ave. \u{2022} Bloomington, IN 47408 \u{2022} (812) 349-3111")
-                .font(.system(size: 13, weight: .regular))
-                .foregroundStyle(CATSTheme.textMuted)
-        }
-        .padding(.vertical, 12)
-        .frame(maxWidth: .infinity)
-        .background(
-            Rectangle()
-                .fill(CATSTheme.footerGray.opacity(0.3))
-        )
-    }
 }
 
 // MARK: - Card Button Style (for tvOS focus)

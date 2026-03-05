@@ -32,7 +32,7 @@ struct CityMeetingsSection: View {
                 Image(systemName: "building.columns")
                     .font(.system(size: 22, weight: .semibold))
                     .foregroundStyle(CATSTheme.accentCoral)
-                Text("CITY MEETINGS")
+                Text("GOVERNMENT MEETINGS")
                     .font(.system(size: 26, weight: .bold))
                     .foregroundStyle(CATSTheme.textPrimary)
             }

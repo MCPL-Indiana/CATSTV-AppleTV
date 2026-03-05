@@ -54,15 +54,23 @@ struct ContentView: View {
                             .padding(.horizontal, 60)
                             .padding(.top, 36)
 
-                        // "CATS ARCHIVE" section heading
-                        Text("CATS ARCHIVE")
+                        // "Latest Videos" section heading
+                        Text("Latest Videos")
                             .font(.system(size: 26, weight: .bold))
                             .foregroundStyle(CATSTheme.textPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.top, 24)
 
-                        // City Meetings video section
+                        // Government Meetings video section
                         CityMeetingsSection()
+                            .padding(.top, 16)
+
+                        // Community Videos section
+                        CommunityVideosSection()
+                            .padding(.top, 16)
+
+                        // CATSWeek video section
+                        CATSWeekSection()
                             .padding(.top, 16)
                             .padding(.bottom, 20)
                     }
